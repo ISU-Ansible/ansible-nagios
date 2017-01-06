@@ -1,0 +1,6 @@
+---
+- name: Reload nagios
+  service:
+    name: "{{ nagios_service }}"
+    state: reloaded
+  when: nagios_allow_reload

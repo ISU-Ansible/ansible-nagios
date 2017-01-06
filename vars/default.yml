@@ -1,0 +1,14 @@
+---
+nagios:
+  log_file: "{{nagios_prefix}}/var/nagios.log"
+  cfg_file:
+    - "{{nagios_prefix}}/etc/contacts"
+    - "{{nagios_prefix}}/etc/contactgroups"
+    - "{{nagios_prefix}}/etc/commands"
+    - "{{nagios_prefix}}/etc/deps"
+    - "{{nagios_prefix}}/etc/hostgroups"
+    - "{{nagios_prefix}}/etc/hosts"
+    - "{{nagios_prefix}}/etc/templates"
+  object_cache_file: "{{nagios_prefix}}/var/objects.cache"
+  precached_object_file: "{{nagios_prefix}}/var/objects.precache"
+  resource_file: "{{nagios_prefix}}/etc/resource.cfg"

@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: Barry Britt <bbritt@iastate.edu>
+  description: A highly configurable role for installing, configuring, and managing Nagios.
+  company: Iowa State University
+  license: MIT
+  min_ansible_version: 2.0
+
+  platforms:
+    - name: EL
+      versions:
+      - 6
+      - 7
+
+  galaxy_tags:
+    - ssh
+    - system

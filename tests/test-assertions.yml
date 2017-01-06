@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  remote_user: root
+
+  roles:
+    - role_under_test
+
+  tasks:
+
+    - name: "[Test] Is the base configuration in place?"
+      shell: cat /etc/ssh/sshd_config
+      register: sshd_configuration
+
+    - debug:
+        var: sshd_configuration
+
+    - assert:
+        that:
+         - '"# Ansible managed" in sshd_configuration.stdout'
