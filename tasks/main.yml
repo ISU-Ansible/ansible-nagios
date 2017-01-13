@@ -1,5 +1,5 @@
 ---
-- name: OPENSSH | Include OS-specific variables.
+- name: NAGIOS | Include OS-specific variables.
   include_vars: "{{item}}"
   with_first_found:
     - "{{ansible_distribution}}_{{ansible_distribution_major_version}}_{{ansible_distribution_minor_version}}.yml"
@@ -12,53 +12,20 @@
   tags:
     - opensshd
 
-- name: OPENSSH | Assert that OS is supported
-  assert:
-    that: opensshd_os_supported == True
-  tags:
-    - opensshd
+- include: register/main.yml
+- include: install/main.yml
+- include: nagios/main.yml
 
-- name: OPENSSH | Install Packages
-  package:
-    name: "{{item}}"
-    state: installed
-  with_items: "{{opensshd_packages}}"
-  tags:
-    - opensshd
+## Check latest nagios version
+## Get current nrpe version
+## Check latest nrpe version
+## Get current nagiosgraph version
+## Check latest nagiosgraph version
+## Get current nagiosplugins version
+## Check latest nagiosplugins verison
 
-- name: OPENSSH | Configure run directory
-  file:
-    path: /var/run/sshd
-    state: directory
-    mode: 0755
-  when: opensshd_manage_var_run
-  tags:
-    - opensshd
+# Nrpe
 
-- name: OPENSSH | Set sshd configuration
-  template:
-    src: opensshd_template.j2
-    dest: "{{opensshd_config_file}}"
-    owner: "{{opensshd_config_owner}}"
-    group: "{{opensshd_config_group}}"
-    mode: "{{opensshd_config_mode}}"
-    validate: "{{opensshd_binary}} -t -f %s"
-  notify:
-    - Reload opensshd
-  tags:
-    - opensshd
+# Nagiosgraph
 
-- name: OPENSSH | Configure service as enabled and running
-  service:
-    name: "{{opensshd_service}}"
-    enabled: true
-    state: running
-  when: opensshd_manage_service
-  tags:
-    - opensshd
-
-- name: OPENSSH | Register that this role has run
-  set_fact: opensshd_has_run=true
-  when: opensshd_has_run is not defined
-  tags:
-    - opensshd
+# Client checks

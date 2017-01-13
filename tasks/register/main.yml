@@ -1,0 +1,38 @@
+---
+# Nagios Checks
+## Get current nagios version
+- name: NAGIOS | Register if Nagios is installed
+  stat: "{{nagios_core_prefix}}/bin/nagios"
+  register: ans_nagios_core
+
+- name: NAGIOS | Register if Nagios Plugins is installed
+  stat: "{{nagios_plugins_prefix}}/libexec/utils.sh"
+  register: ans_nagios_plugins
+
+- name: NAGIOS | Register if Nagiosgraph is installed
+  stat: "{{nagios_graph_prefix}}/bin/insert.pl"
+  register: ans_nagios_graph
+
+- name: NAGIOS | Register if NRPE is installed
+  stat: "{{nagios_nrpe_prefix}}/bin/nrpe"
+  register: ans_nagios_nrpe
+
+- name: NAGIOS | Get current nagios verison
+  shell: "/opt/nagios/bin/nagios --version | sed -ne 's/^Nagios\ Core \([0-9\.]*\)$/\1/p'"
+  register: nagios_version
+  when: ans_nagios_core.stat.exists
+
+- name: NAGIOS | Get current nagios plugins version
+  shell: "/opt/nagios/libexec/check_nagios --version | awk -F'[() ]' '{print $5}'"
+  register: nagios_plugins_version
+  when: ans_nagios_plugins.stat.exists
+
+- name: NAGIOS | Get nagiosgraph version
+  shell: "cat insert.pl  | grep '^\$VERSION' | awk -F\"[ =']\" '{print $5}'"
+  register: nagios_graph_version
+  when: ans_nagios_graph.stat.exists
+
+- name: NAGIOS | Get nrpe version
+  stat: "{{nagios_nrpe_prefix}}/bin/nrpe -v | grep "^Version" | awk -F' ' '{print $2}'"
+  register: nagios_nrpe_version
+  when: ans_nagios_nrpe.stat.exists

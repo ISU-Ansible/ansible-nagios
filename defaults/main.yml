@@ -5,7 +5,6 @@
 # override this variable
 #
 nagios_enabled: true
-#nagios_manage_service: "{{ false if ansible_virtualization_type == 'docker' else true }}"
 nagios_manage_service: true
 nagios_allow_reload: "{{ nagios_manage_service }}"
 nagios_skip_defaults: false
@@ -15,13 +14,24 @@ nagios_skip_defaults: false
 #
 nagios: {}
 
-### VARS DEFAULTS
-### The following are defaults for OS specific configuration in var files in
-### this role. They should not be set by role users.
+#
+#  Default Variables
+#    The following are defaults for OS specific configuration in var files in
+#    this role. They should not be set by role users.
+#
+nagios_core_prefix: "/opt/nagios"
+nagios_plugins_prefix: "/opt/nagios"
+nagios_graph_prefix: "/opt/nagiosgraph"
+nagios_nrpe_prefix: "/opt/nagios"
+
+nagios_user: "nagios"
+nagios_group: "nagios"
+nrpe_user: "nrpe"
+nrpe_group: "nrpe"
+
 nagios_packages: []
-nagios_prefix: "/opt/nagios"
-nagios_config_owner: nagios
-nagios_config_group: nagios
+nagios_config_owner: "{{nagios_user}}"
+nagios_config_group: "{{nagios_group}}"
 nagios_config_mode: "0600"
 nagios_config_file:
 nagios_binary: "{{nagios_prefix}}/bin/nagios"
