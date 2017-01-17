@@ -1,15 +1,15 @@
 ---
-- name: NAGIOS | Add Nagios Group
+- name: NAGIOS | Add NRPE Group
   group:
-    name: "{{nagios_group | default(nagios_defaults[nagios_group])}}"
-    gid: "{{nagios_group_gid | default('624')}}"
+    name: "{{nrpe_group | default('nrpe')}}"
+    gid: "{{nrpe_group_gid | default('676')}}"
     system: yes
     state: present
 
-- name: NAGIOS | Add Nagios User
+- name: NAGIOS | Add NRPE User
   user:
-    name: "{{nagios_user | default(nagios_defaults[nagios_user])}}"
-    uid: "{{nagios_user_uid | default('624')}}"
+    name: "{{nrpe_user | default('nrpe')}}"
+    uid: "{{nrpe_user_uid | default('676')}}"
     system: yes
     groups: nagios
     state: present

@@ -1,6 +1,7 @@
+{{ ansible_managed }}
 {% from 'template.macros' import option,render with context %}
+
 ##############################################################################
-# {{ ansible_managed }}
 #
 # NAGIOS.CFG - Configuration file for Nagios
 #
@@ -14,7 +15,7 @@
 # This is the main log file where service and host events are logged
 # for historical purposes.  This should be the first option specified
 # in the config file!!!
-{{ option("log_file") }}
+{{ option(nagios_config, nagios_defaults, log_file, "/usr/local/nagios/var/nagios.log") }}
 
 
 # OBJECT CONFIGURATION FILE(S)
@@ -28,7 +29,7 @@
 #cfg_file=/usr/local/nagios/etc/objects/windows.cfg
 #cfg_file=/usr/local/nagios/etc/objects/switch.cfg
 #cfg_file=/usr/local/nagios/etc/objects/printer.cfg
-{{ option("cfg_file") }}
+{{ option(nagios_config, nagios_defaults, cfg_file, "") }}
 
 
 # You can also tell Nagios to process all config files (with a .cfg
@@ -38,7 +39,7 @@
 #cfg_dir=/usr/local/nagios/etc/printers
 #cfg_dir=/usr/local/nagios/etc/switches
 #cfg_dir=/usr/local/nagios/etc/routers
-{{ option("cfg_dir") }}
+{{ option(nagios_config, nagios_defaults, cfg_dir, "") }}
 
 
 # OBJECT CACHE FILE
@@ -47,7 +48,7 @@
 # this cache file (rather than looking at the object config files
 # directly) in order to prevent inconsistencies that can occur
 # when the config files are modified after Nagios starts.
-{{ option("object_cache_file") }}
+{{ option(nagios_config, nagios_defaults, object_cache_file, "/usr/local/nagios/var/objects.cache" }}
 
 
 # PRE-CACHED OBJECT FILE
@@ -61,7 +62,7 @@
 # the Nagios process if you've got a large and/or complex configuration.
 # Read the documentation section on optimizing Nagios to find our more
 # about how this feature works.
-{{ option("precached_object_file") }}
+{{ option(nagios_config, nagios_defaults, precached_object_file, "/usr/local/nagios/var/objects.precache") }}
 
 
 # RESOURCE FILE
@@ -72,7 +73,7 @@
 # considered to be sensitive (usernames, passwords, etc) can be
 # defined as macros in this file and restrictive permissions (600)
 # can be placed on this file.
-{{ option("resource_file") }}
+{{ option(nagios_config, nagios_defaults, resource_file, "/usr/local/nagios/etc/resource.cfg") }}
 
 
 # STATUS FILE
@@ -80,26 +81,26 @@
 # hosts is stored.  Its contents are read and processed by the CGIs.
 # The contents of the status file are deleted every time Nagios
 #  restarts.
-{{ option("status_file") }}
+{{ option(nagios_config, nagios_defaults, status_file, "/usr/local/nagios/var/status.dat") }}
 
 
 # STATUS FILE UPDATE INTERVAL
 # This option determines the frequency (in seconds) that
 # Nagios will periodically dump program, host, and
 # service status data.
-{{ option("status_update_interval") }}
+{{ option(nagios_config, nagios_defaults, status_update_interval, "10") }}
 
 
 # NAGIOS USER
 # This determines the effective user that Nagios should run as.
 # You can either supply a username or a UID.
-{{ option("nagios_user") }}
+{{ option(nagios_config, nagios_defaults, nagios_user, "nagios") }}
 
 
 # NAGIOS GROUP
 # This determines the effective group that Nagios should run as.
 # You can either supply a group name or a GID.
-{{ option("nagios_group") }}
+{{ option(nagios_config, nagios_defaults, nagios_group, "nagios") }}
 
 
 # EXTERNAL COMMAND OPTION
@@ -109,7 +110,7 @@
 # cautious side.  If you want to be able to use the CGI command interface
 # you will have to enable this.
 # Values: 0 = disable commands, 1 = enable commands
-{{ option("check_external_commands") }}
+{{ option(nagios_config, nagios_defaults, check_external_commands, true) }}
 
 
 # EXTERNAL COMMAND FILE
@@ -119,19 +120,18 @@
 # is running as (usually 'nobody').  Permissions should be set at the
 # directory level instead of on the file, as the file is deleted every
 # time its contents are processed.
-{{ option("command_file") }}
+{{ option(nagios_config, nagios_defaults, command_file, "/usr/local/nagios/var/rw/nagios.cmd") }}
 
 
 # QUERY HANDLER INTERFACE
 # This is the socket that is created for the Query Handler interface
-#query_socket=/usr/local/nagios/var/rw/nagios.qh
-{{ option("query_socket") }}
+#{{ option(nagios_config, nagios_defaults, query_socket, "/usr/local/nagios/var/rw/nagios.qh") }}
 
 
 # LOCK FILE
 # This is the lockfile that Nagios will use to store its PID number
 # in when it is running in daemon mode.
-{{ option("lock_file") }}
+{{ option(nagios_config, nagios_defaults, lock_file, "/usr/local/nagios/var/nagios.lock") }}
 
 
 # TEMP FILE
@@ -139,13 +139,13 @@
 # updates the status log, cleans the comment file, etc.  This file
 # is created, used, and deleted throughout the time that Nagios is
 # running.
-{{ option("temp_file") }}
+{{ option(nagios_config, nagios_defaults, temp_file, "/usr/local/nagios/var/nagios.tmp") }}
 
 
 # TEMP PATH
 # This is path where Nagios can create temp files for service and
 # host check results, etc.
-{{ option("temp_path") }}
+{{ option(nagios_config, nagios_defaults, temp_path, "/tmp") }}
 
 
 # EVENT BROKER OPTIONS
@@ -153,7 +153,7 @@
 # Values:  0      = Broker nothing
 #         -1      = Broker everything
 #         <other> = See documentation
-{{option("event_broker_options") }}
+{{option(nagios_config, nagios_defaults, event_broker_options, "-1") }}
 
 
 # EVENT BROKER MODULE(S)
@@ -179,7 +179,7 @@
 #   broker_module=<modulepath> [moduleargs]
 #broker_module=/somewhere/module1.o
 #broker_module=/somewhere/module2.o arg1 arg2=3 debug=0
-{{ option("broker_module") }}
+{{ option(nagios_config, nagios_defaults, broker_module, "") }}
 
 # LOG ROTATION METHOD
 # This is the log rotation method that Nagios should use to rotate
@@ -189,44 +189,44 @@
 #	d	= Daily rotation (midnight every day)
 #	w	= Weekly rotation (midnight on Saturday evening)
 #	m	= Monthly rotation (midnight last day of month)
-{{ option("log_rotation_method") }}
+{{ option(nagios_config, nagios_defaults, log_rotation_method, "d") }}
 
 
 # LOG ARCHIVE PATH
 # This is the directory where archived (rotated) log files should be
 # placed (assuming you've chosen to do log rotation).
-{{ option("log_archive_path") }}
+{{ option(nagios_config, nagios_defaults, log_archive_path, "/usr/local/nagios/var/archives") }}
 
 
 # LOGGING OPTIONS
 # If you want messages logged to the syslog facility, as well as the
 # Nagios log file set this option to 1.  If not, set it to 0.
-{{ option("use_syslog") }}
+{{ option(nagios_config, nagios_defaults, use_syslog, "1") }}
 
 
 # NOTIFICATION LOGGING OPTION
 # If you don't want notifications to be logged, set this value to 0.
 # If notifications should be logged, set the value to 1.
-{{ option("log_notifications") }}
+{{ option(nagios_config, nagios_defaults, log_notifications, "1") }}
 
 
 # SERVICE RETRY LOGGING OPTION
 # If you don't want service check retries to be logged, set this value
 # to 0.  If retries should be logged, set the value to 1.
-{{ option("log_service_retries") }}
+{{ option(nagios_config, nagios_defaults, log_service_retries, "1") }}
 
 
 # HOST RETRY LOGGING OPTION
 # If you don't want host check retries to be logged, set this value to
 # 0.  If retries should be logged, set the value to 1.
-{{ option("log_host_retries") }}
+{{ option(nagios_config, nagios_defaults, log_host_retries, "1") }}
 
 
 # EVENT HANDLER LOGGING OPTION
 # If you don't want host and service event handlers to be logged, set
 # this value to 0.  If event handlers should be logged, set the value
 # to 1.
-{{ option("log_event_handlers") }}
+{{ option(nagios_config, nagios_defaults, log_event_handlers, "1") }}
 
 
 # INITIAL STATES LOGGING OPTION
@@ -236,14 +236,14 @@
 # are not using an external application that does long term state
 # statistics reporting, you do not need to enable this option.  In
 # this case, set the value to 0.
-{{ option("log_initial_states") }}
+{{ option(nagios_config, nagios_defaults, log_initial_states, "0") }}
 
 
 # CURRENT STATES LOGGING OPTION
 # If you don't want Nagios to log all current host and service states
 # after log has been rotated to the main log file, you can disable this
 # option by setting this value to 0. Default value is 1.
-{{ option("log_current_states") }}
+{{ option(nagios_config, nagios_defaults, log_current_states, "1") }}
 
 
 # EXTERNAL COMMANDS LOGGING OPTION
@@ -252,14 +252,14 @@
 # Note: This option does not include logging of passive service
 # checks - see the option below for controlling whether or not
 # passive checks are logged.
-{{ option("log_external_commands") }}
+{{ option(nagios_config, nagios_defaults, log_external_commands, "1") }}
 
 
 # PASSIVE CHECKS LOGGING OPTION
 # If you don't want Nagios to log passive host and service checks, set
 # this value to 0.  If passive checks should be logged, set
 # this value to 1.
-{{ option("log_passive_checks") }}
+{{ option(nagios_config, nagios_defaults, log_passive_checks, "1") }}
 
 
 # GLOBAL HOST AND SERVICE EVENT HANDLERS
@@ -270,10 +270,8 @@
 # service definition. The command argument is the short name of a
 # command definition that you define in your host configuration file.
 # Read the HTML docs for more information.
-#global_host_event_handler=somecommand
-#global_service_event_handler=somecommand
-{{ option("global_host_event_handler") }}
-{{ option("global_service_event_handler") }}
+{{ option(nagios_config, nagios_defaults, global_host_event_handler, "") }}
+{{ option(nagios_config, nagios_defaults, global_service_event_handler, "") }}
 
 
 # SERVICE INTER-CHECK DELAY METHOD
@@ -289,14 +287,14 @@
 #	d	= Use a "dumb" delay of 1 second between checks
 #	s	= Use "smart" inter-check delay calculation
 #       x.xx    = Use an inter-check delay of x.xx seconds
-{{ option("service_inter_check_delay_method") }}
+{{ option(nagios_config, nagios_defaults, service_inter_check_delay_method, "s") }}
 
 
 # MAXIMUM SERVICE CHECK SPREAD
 # This variable determines the timeframe (in minutes) from the
 # program start time that an initial check of all services should
 # be completed.  Default is 30 minutes.
-{{ option("max_service_check_spread") }}
+{{ option(nagios_config, nagios_defaults, max_service_check_spread, "30") }}
 
 
 # SERVICE CHECK INTERLEAVE FACTOR
@@ -310,7 +308,7 @@
 #       s       = Use "smart" interleave factor calculation
 #       x       = Use an interleave factor of x, where x is a
 #                 number greater than or equal to 1.
-{{ option("service_interleave_factor") }}
+{{ option(nagios_config, nagios_defaults, service_interleave_factor, "s") }}
 
 
 # HOST INTER-CHECK DELAY METHOD
@@ -324,14 +322,14 @@
 #	d	= Use a "dumb" delay of 1 second between checks
 #	s	= Use "smart" inter-check delay calculation
 #       x.xx    = Use an inter-check delay of x.xx seconds
-{{ option("host_inter_check_delay_method") }}
+{{ option(nagios_config, nagios_defaults, host_inter_check_delay_method, "s") }}
 
 
 # MAXIMUM HOST CHECK SPREAD
 # This variable determines the timeframe (in minutes) from the
 # program start time that an initial check of all hosts should
 # be completed.  Default is 30 minutes.
-{{ option("max_host_check_spread") }}
+{{ option(nagios_config, nagios_defaults, max_host_check_spread, "30") }}
 
 
 # MAXIMUM CONCURRENT SERVICE CHECKS
@@ -341,13 +339,13 @@
 # any service checks from being parallelized.  A value of 0
 # will not restrict the number of concurrent checks that are
 # being executed.
-{{ option("max_concurrent_checks") }}
+{{ option(nagios_config, nagios_defaults, max_concurrent_checks, "0") }}
 
 
 # HOST AND SERVICE CHECK REAPER FREQUENCY
 # This is the frequency (in seconds!) that Nagios will process
 # the results of host and service checks.
-{{ option("check_result_reaper_frequency") }}
+{{ option(nagios_config, nagios_defaults, check_result_reaper_frequency, "10") }}
 
 
 # MAX CHECK RESULT REAPER TIME
@@ -355,7 +353,7 @@
 # check result reaper event will be allowed to run before
 # returning control back to Nagios so it can perform other
 # duties.
-{{ option("max_check_result_reaper_time") }}
+{{ option(nagios_config, nagios_defaults, max_check_result_reaper_time, "30") }}
 
 
 # CHECK RESULT PATH
@@ -364,14 +362,14 @@
 #
 # Note: Make sure that only one instance of Nagios has access
 # to this directory!
-{{ option("check_result_path") }}
+{{ option(nagios_config, nagios_defaults, check_result_path, "/usr/local/nagios/var/spool/checkresults") }}
 
 
 # MAX CHECK RESULT FILE AGE
 # This option determines the maximum age (in seconds) which check
 # result files are considered to be valid.  Files older than this
 # threshold will be mercilessly deleted without further processing.
-{{ option("max_check_result_file_age") }}
+{{ option(nagios_config, nagios_defaults, max_check_result_file_age, "3600") }}
 
 
 # CACHED HOST CHECK HORIZON
@@ -384,7 +382,7 @@
 # states being used by Nagios, while a lower value may result in a
 # performance hit for host checks.  Use a value of 0 to disable host
 # check caching.
-{{ option("cached_host_check_horizon") }}
+{{ option(nagios_config, nagios_defaults, cached_host_check_horizon, "15") }}
 
 
 # CACHED SERVICE CHECK HORIZON
@@ -394,7 +392,7 @@
 # recently that the timeframe specified by this value) can immensely
 # improve performance in regards to predictive dependency checks.
 # Use a value of 0 to disable service check caching.
-{{ option("cached_service_check_horizon") }}
+{{ option(nagios_config, nagios_defaults, cached_service_check_horizon, "15") }}
 
 
 # ENABLE PREDICTIVE HOST DEPENDENCY CHECKS
@@ -405,7 +403,7 @@
 # Values:
 #  0 = Disable predictive checks
 #  1 = Enable predictive checks (default)
-{{ option("enable_predictive_host_dependency_checks") }}
+{{ option(nagios_config, nagios_defaults, enable_predictive_host_dependency_checks, "1") }}
 
 
 # ENABLE PREDICTIVE SERVICE DEPENDENCY CHECKS
@@ -416,7 +414,7 @@
 # Values:
 #  0 = Disable predictive checks
 #  1 = Enable predictive checks (default)
-{{ option("enable_predictive_service_dependency_checks") }}
+{{ option(nagios_config, nagios_defaults, enable_predictive_service_dependency_checks, "1") }}
 
 
 # SOFT STATE DEPENDENCIES
@@ -428,14 +426,13 @@
 # Values:
 #  0 = Don't use soft state dependencies (default)
 #  1 = Use soft state dependencies
-{{ option("soft_state_dependencies") }}
+{{ option(nagios_config, nagios_defaults, soft_state_dependencies, "0") }}
 
 
 # TIME CHANGE ADJUSTMENT THRESHOLDS
 # These options determine when Nagios will react to detected changes
 # in system time (either forward or backwards).
-#time_change_threshold=900
-{{ option("time_change_threshold") }}
+{{ option(nagios_config, nagios_defaults, time_change_threshold, "") }}
 
 
 # AUTO-RESCHEDULING OPTION
@@ -445,7 +442,7 @@
 # the monitoring server.
 # WARNING: THIS IS AN EXPERIMENTAL FEATURE - IT CAN DEGRADE
 # PERFORMANCE, RATHER THAN INCREASE IT, IF USED IMPROPERLY
-{{ option("auto_reschedule_checks") }}
+{{ option(nagios_config, nagios_defaults, auto_reschedule_checks, "0") }}
 
 
 # AUTO-RESCHEDULING INTERVAL
@@ -455,7 +452,7 @@
 # Default is 30 seconds.
 # WARNING: THIS IS AN EXPERIMENTAL FEATURE - IT CAN DEGRADE
 # PERFORMANCE, RATHER THAN INCREASE IT, IF USED IMPROPERLY
-{{ option("auto_rescheduling_interval") }}
+{{ option(nagios_config, nagios_defaults, auto_rescheduling_interval, "30") }}
 
 
 # AUTO-RESCHEDULING WINDOW
@@ -467,7 +464,7 @@
 # enabled.  Default is 180 seconds (3 minutes).
 # WARNING: THIS IS AN EXPERIMENTAL FEATURE - IT CAN DEGRADE
 # PERFORMANCE, RATHER THAN INCREASE IT, IF USED IMPROPERLY
-{{ option("auto_rescheduling_window") }}
+{{ option(nagios_config, nagios_defaults, auto_rescheduling_window, "180") }}
 
 
 # TIMEOUT VALUES
@@ -477,12 +474,12 @@
 # service checks, host checks, event handlers, notifications, the
 # ocsp command, and performance data commands.  All values are in
 # seconds.
-{{ option("service_check_timeout") }}
-{{ option("host_check_timeout") }}
-{{ option("event_handler_timeout") }}
-{{ option("notification_timeout") }}
-{{ option("ocsp_timeout") }}
-{{ option("perfdata_timeout") }}
+{{ option(nagios_config, nagios_defaults, service_check_timeout, "60") }}
+{{ option(nagios_config, nagios_defaults, host_check_timeout, "30") }}
+{{ option(nagios_config, nagios_defaults, event_handler_timeout, "30") }}
+{{ option(nagios_config, nagios_defaults, notification_timeout, "30") }}
+{{ option(nagios_config, nagios_defaults, ocsp_timeout, "5") }}
+{{ option(nagios_config, nagios_defaults, perfdata_timeout, "5") }}
 
 
 # RETAIN STATE INFORMATION
@@ -494,7 +491,7 @@
 # slow Nagios down a bit when it (re)starts.  Since its only
 # a one-time penalty, I think its well worth the additional
 # startup delay.
-{{ option("retain_state_information") }}
+{{ option(nagios_config, nagios_defaults, retain_state_information, "1") }}
 
 
 # STATE RETENTION FILE
@@ -504,7 +501,7 @@
 # starting to monitor the network when Nagios is restarted.
 # This file is used only if the retain_state_information
 # variable is set to 1.
-{{ option("state_retention_file") }}
+{{ option(nagios_config, nagios_defaults, state_retention_file, "/usr/local/nagios/var/retention.dat") }}
 
 
 # RETENTION DATA UPDATE INTERVAL
@@ -514,7 +511,7 @@
 # data at regular interval, but it will still save retention
 # data before shutting down or restarting.  If you have disabled
 # state retention, this option has no effect.
-{{ option("retention_update_interval") }}
+{{ option(nagios_config, nagios_defaults, retention_update_interval, "60") }}
 
 
 # USE RETAINED PROGRAM STATE
@@ -523,7 +520,7 @@
 # retention file.  If you want to use retained program status
 # information, set this value to 1.  If not, set this value
 # to 0.
-{{ option("use_retained_program_state") }}
+{{ option(nagios_config, nagios_defaults, use_retained_program_state, "1") }}
 
 
 # USE RETAINED SCHEDULING INFO
@@ -532,7 +529,7 @@
 # based on the values saved in the retention file.  If you
 # If you want to use retained scheduling info, set this
 # value to 1.  If not, set this value to 0.
-{{ option("use_retained_scheduling_info") }}
+{{ option(nagios_config, nagios_defaults, use_retained_scheduling_info, "1") }}
 
 
 # RETAINED ATTRIBUTE MASKS (ADVANCED FEATURE)
@@ -548,26 +545,26 @@
 # MODATTR_EVENT_HANDLER_ENABLED (8) + MODATTR_FLAP_DETECTION_ENABLED (16) = 24
 
 # This mask determines what host attributes are not retained
-{{ option("retained_host_attribute_mask") }}
+{{ option(nagios_config, nagios_defaults, retained_host_attribute_mask, "0") }}
 
 # This mask determines what service attributes are not retained
-{{ option("retained_service_attribute_mask") }}
+{{ option(nagios_config, nagios_defaults, retained_service_attribute_mask, "0") }}
 
 
 # These two masks determine what process attributes are not retained.
 # There are two masks, because some process attributes have host and service
 # options.  For example, you can disable active host checks, but leave active
 # service checks enabled.
-{{ option("retained_process_host_attribute_mask") }}
-{{ option("retained_process_service_attribute_mask") }}
+{{ option(nagios_config, nagios_defaults, retained_process_host_attribute_mask, "0") }}
+{{ option(nagios_config, nagios_defaults, retained_process_service_attribute_mask, "0") }}
 
 
 # These two masks determine what contact attributes are not retained.
 # There are two masks, because some contact attributes have host and
 # service options.  For example, you can disable host notifications for
 # a contact, but leave service notifications enabled for them.
-{{ option("retained_contact_host_attribute_mask") }}
-{{ option("retained_contact_service_attribute_mask") }}
+{{ option(nagios_config, nagios_defaults, retained_contact_host_attribute_mask, "0") }}
+{{ option(nagios_config, nagios_defaults, retained_contact_service_attribute_mask, "0") }}
 
 
 # INTERVAL LENGTH
@@ -575,7 +572,7 @@
 # host/contact/service configuration files.  Setting this to 60 means
 # that each interval is one minute long (60 seconds).  Other settings
 # have not been tested much, so your mileage is likely to vary...
-{{ option("interval_length") }}
+{{ option(nagios_config, nagios_defaults, interval_length, "60") }}
 
 
 # CHECK FOR UPDATES
@@ -586,7 +583,7 @@
 # good shape.  Nagios will check once a day for new updates. Data collected
 # by Nagios Enterprises from the update check is processed in accordance
 # with our privacy policy - see http://api.nagios.org for details.
-{{ option("check_for_updates") }}
+{{ option(nagios_config, nagios_defaults, check_for_updates, "1") }}
 
 
 # BARE UPDATE CHECK
@@ -596,7 +593,7 @@
 # to whether this was a new installation or not.  Nagios Enterprises uses
 # this data to determine the number of users running specific version of
 # Nagios.  Enable this option if you do not want this information to be sent.
-{{ option("bare_update_check") }}
+{{ option(nagios_config, nagios_defaults, bare_update_check, "0") }}
 
 
 # AGGRESSIVE HOST CHECKING OPTION
@@ -605,7 +602,7 @@
 # enable the aggressive check option.  Read the docs for more info
 # on what aggressive host check is or check out the source code in
 # base/checks.c
-{{ option("use_aggressive_host_checking") }}
+{{ option(nagios_config, nagios_defaults, use_aggressive_host_checking, "0") }}
 
 
 # SERVICE CHECK EXECUTION OPTION
@@ -616,14 +613,14 @@
 # you're implementing redundant hosts or have a special need for
 # disabling the execution of service checks, leave this enabled!
 # Values: 1 = enable checks, 0 = disable checks
-{{ option("execute_service_checks") }}
+{{ option(nagios_config, nagios_defaults, execute_service_checks, "1") }}
 
 
 # PASSIVE SERVICE CHECK ACCEPTANCE OPTION
 # This determines whether or not Nagios will accept passive
 # service checks results when it initially (re)starts.
 # Values: 1 = accept passive checks, 0 = reject passive checks
-{{ option("accept_passive_service_checks") }}
+{{ option(nagios_config, nagios_defaults, accept_passive_service_checks, "1") }}
 
 
 # HOST CHECK EXECUTION OPTION
@@ -634,21 +631,21 @@
 # you're implementing redundant hosts or have a special need for
 # disabling the execution of host checks, leave this enabled!
 # Values: 1 = enable checks, 0 = disable checks
-{{ option("execute_host_checks") }}
+{{ option(nagios_config, nagios_defaults, execute_host_checks, "1") }}
 
 
 # PASSIVE HOST CHECK ACCEPTANCE OPTION
 # This determines whether or not Nagios will accept passive
 # host checks results when it initially (re)starts.
 # Values: 1 = accept passive checks, 0 = reject passive checks
-{{ option("accept_passive_host_checks") }}
+{{ option(nagios_config, nagios_defaults, accept_passive_host_checks, "1") }}
 
 
 # NOTIFICATIONS OPTION
 # This determines whether or not Nagios will sent out any host or
 # service notifications when it is initially (re)started.
 # Values: 1 = enable notifications, 0 = disable notifications
-{{ option("enable_notifications") }}
+{{ option(nagios_config, nagios_defaults, enable_notifications, "1") }}
 
 
 # EVENT HANDLER USE OPTION
@@ -656,7 +653,15 @@
 # service event handlers when it is initially (re)started.  Unless
 # you're implementing redundant hosts, leave this option enabled.
 # Values: 1 = enable event handlers, 0 = disable event handlers
-{{ option("enable_event_handlers") }}
+{{ option(nagios_config, nagios_defaults, enable_event_handlers, "1") }}
+
+# process nagios performance data using nagiosgraph
+{{ option(nagios_config, nagios_defaults, process_performance_data, "") }}
+{{ option(nagios_config, nagios_defaults, service_perfdata_file, "") }}
+{{ option(nagios_config, nagios_defaults, service_perfdata_file_template, "") }}
+{{ option(nagios_config, nagios_defaults, service_perfdata_file_mode, "") }}
+{{ option(nagios_config, nagios_defaults, service_perfdata_file_processing_interval, "") }}
+{{ option(nagios_config, nagios_defaults, service_perfdata_file_processing_command, "") }}
 
 
 # OBSESS OVER SERVICE CHECKS OPTION
@@ -666,7 +671,7 @@
 # this option.  Read the HTML docs for more information on
 # implementing distributed monitoring.
 # Values: 1 = obsess over services, 0 = do not obsess (default)
-{{ option("obsess_over_services") }}
+{{ option(nagios_config, nagios_defaults, obsess_over_services, "0") }}
 
 
 # OBSESSIVE COMPULSIVE SERVICE PROCESSOR COMMAND
@@ -676,8 +681,7 @@
 # argument is the short name of a command definition that you
 # define in your host configuration file. Read the HTML docs for
 # more information on implementing distributed monitoring.
-#ocsp_command=somecommand
-{{ option("ocsp_command") }}
+{{ option(nagios_config, nagios_defaults, ocsp_command, "") }}
 
 
 # OBSESS OVER HOST CHECKS OPTION
@@ -687,7 +691,7 @@
 # this option.  Read the HTML docs for more information on
 # implementing distributed monitoring.
 # Values: 1 = obsess over hosts, 0 = do not obsess (default)
-{{ option("obsess_over_hosts") }}
+{{ option(nagios_config, nagios_defaults, obsess_over_hosts, "0") }}
 
 
 # OBSESSIVE COMPULSIVE HOST PROCESSOR COMMAND
@@ -697,8 +701,7 @@
 # argument is the short name of a command definition that you
 # define in your host configuration file. Read the HTML docs for
 # more information on implementing distributed monitoring.
-#ochp_command=somecommand
-{{ option("ochp_command") }}
+{{ option(nagios_config, nagios_defaults, ochp_command, "") }}
 
 
 # TRANSLATE PASSIVE HOST CHECKS OPTION
@@ -714,7 +717,7 @@
 # to translate any DOWN or UNREACHABLE host states it receives
 # passively into the correct state from the view of this server.
 # Values: 1 = perform translation, 0 = do not translate (default)
-{{ option("translate_passive_host_checks") }}
+{{ option(nagios_config, nagios_defaults, translate_passive_host_checks, "0") }}
 
 
 # PASSIVE HOST CHECKS ARE SOFT OPTION
@@ -723,7 +726,7 @@
 # result will put a host into a HARD state type.  This can be changed
 # by enabling this option.
 # Values: 0 = passive checks are HARD, 1 = passive checks are SOFT
-{{ option("passive_host_checks_are_soft") }}
+{{ option(nagios_config, nagios_defaults, passive_host_checks_are_soft, "0") }}
 
 
 # ORPHANED HOST/SERVICE CHECK OPTIONS
@@ -738,8 +741,8 @@
 # If you have problems with service checks never getting
 # rescheduled, make sure you have orphaned service checks enabled.
 # Values: 1 = enable checks, 0 = disable checks
-{{ option("check_for_orphaned_services") }}
-{{ option("check_for_orphaned_hosts") }}
+{{ option(nagios_config, nagios_defaults, check_for_orphaned_services, "1") }}
+{{ option(nagios_config, nagios_defaults, check_for_orphaned_hosts, "1") }}
 
 
 # SERVICE FRESHNESS CHECK OPTION
@@ -748,14 +751,14 @@
 # is useful for ensuring passive checks are received in a timely
 # manner.
 # Values: 1 = enabled freshness checking, 0 = disable freshness checking
-{{ option("check_service_freshness") }}
+{{ option(nagios_config, nagios_defaults, check_service_freshness, "1") }}
 
 
 # SERVICE FRESHNESS CHECK INTERVAL
 # This setting determines how often (in seconds) Nagios will
 # check the "freshness" of service check results.  If you have
 # disabled service freshness checking, this option has no effect.
-{{ option("service_freshness_check_interval") }}
+{{ option(nagios_config, nagios_defaults, service_freshness_check_interval, "60") }}
 
 
 # SERVICE CHECK TIMEOUT STATE
@@ -769,7 +772,7 @@
 # u - Unknown
 # w - Warning
 # o - OK
-{{ option("service_check_timeout_state") }}
+{{ option(nagios_config, nagios_defaults, service_check_timeout_state, "c") }}
 
 
 # HOST FRESHNESS CHECK OPTION
@@ -778,21 +781,21 @@
 # is useful for ensuring passive checks are received in a timely
 # manner.
 # Values: 1 = enabled freshness checking, 0 = disable freshness checking
-{{ option("check_host_freshness") }}
+{{ option(nagios_config, nagios_defaults, check_host_freshness, "0") }}
 
 
 # HOST FRESHNESS CHECK INTERVAL
 # This setting determines how often (in seconds) Nagios will
 # check the "freshness" of host check results.  If you have
 # disabled host freshness checking, this option has no effect.
-{{ option("host_freshness_check_interval") }}
+{{ option(nagios_config, nagios_defaults, host_freshness_check_interval, "60") }}
 
 
 # ADDITIONAL FRESHNESS THRESHOLD LATENCY
 # This setting determines the number of seconds that Nagios
 # will add to any host and service freshness thresholds that
 # it calculates (those not explicitly specified by the user).
-{{ option("additional_freshness_latency") }}
+{{ option(nagios_config, nagios_defaults, additional_freshness_latency, "15") }}
 
 
 # FLAP DETECTION OPTION
@@ -806,17 +809,17 @@
 # the HTML documentation before enabling this feature!
 # Values: 1 = enable flap detection
 #         0 = disable flap detection (default)
-{{ option("enable_flap_detection") }}
+{{ option(nagios_config, nagios_defaults, enable_flap_detection, "1") }}
 
 
 # FLAP DETECTION THRESHOLDS FOR HOSTS AND SERVICES
 # Read the HTML documentation on flap detection for
 # an explanation of what this option does.  This option
 # has no effect if flap detection is disabled.
-{{ option("low_service_flap_threshold") }}
-{{ option("high_service_flap_threshold") }}
-{{ option("low_host_flap_threshold") }}
-{{ option("high_host_flap_threshold") }}
+{{ option(nagios_config, nagios_defaults, low_service_flap_threshold, "5.0") }}
+{{ option(nagios_config, nagios_defaults, high_service_flap_threshold, "20.0") }}
+{{ option(nagios_config, nagios_defaults, low_host_flap_threshold, "5.0") }}
+{{ option(nagios_config, nagios_defaults, high_host_flap_threshold, "20.0") }}
 
 
 # DATE FORMAT OPTION
@@ -827,7 +830,7 @@
 #	iso8601		(YYYY-MM-DD HH:MM:SS)
 #	strict-iso8601	(YYYY-MM-DDTHH:MM:SS)
 #
-{{ option("date_format") }}
+{{ option(nagios_config, nagios_defaults, date_format, "iso8601") }}
 
 
 # TIMEZONE OFFSET
@@ -845,14 +848,14 @@
 #   </Directory>
 #use_timezone=US/Mountain
 #use_timezone=Australia/Brisbane
-{{ option("use_timezone") }}
+{{ option(nagios_config, nagios_defaults, use_timezone, "US/Central") }}
 
 
 # ILLEGAL OBJECT NAME CHARACTERS
 # This option allows you to specify illegal characters that cannot
 # be used in host names, service descriptions, or names of other
 # object types.
-{{ option("illegal_object_name_chars") }}
+{{ option(nagios_config, nagios_defaults, illegal_object_name_chars, '`~!$%^&*|''"<>?,()=') }}
 
 
 # ILLEGAL MACRO OUTPUT CHARACTERS
@@ -871,7 +874,7 @@
 #	$SERVICEPERFDATA$
 #	$SERVICEACKAUTHOR$
 #	$SERVICEACKCOMMENT$
-{{ option("illegal_macro_output_chars") }}
+{{ option(nagios_config, nagios_defaults, illegal_macro_output_chars, '`~$&|'"<>') }}
 
 
 # REGULAR EXPRESSION MATCHING
@@ -880,7 +883,7 @@
 # matching is used to match host, hostgroup, service, and service
 # group names/descriptions in some fields of various object types.
 # Values: 1 = enable regexp matching, 0 = disable regexp matching
-{{ option("use_regexp_matching") }}
+{{ option(nagios_config, nagios_defaults, use_regexp_matching, "0") }}
 
 
 # "TRUE" REGULAR EXPRESSION MATCHING
@@ -892,7 +895,7 @@
 # (* and ?).  If the option is ENABLED, regexp matching occurs
 # all the time (which can be annoying).
 # Values: 1 = enable true matching, 0 = disable true matching
-{{ option("use_true_regexp_matching") }}
+{{ option(nagios_config, nagios_defaults, use_true_regexp_matching, "0") }}
 
 
 # ADMINISTRATOR EMAIL/PAGER ADDRESSES
@@ -900,8 +903,8 @@
 # Nagios never uses these values itself, but you can access them by
 # using the $ADMINEMAIL$ and $ADMINPAGER$ macros in your notification
 # commands.
-{{ option("admin_email") }}
-{{ option("admin_pager") }}
+{{ option(nagios_config, nagios_defaults, admin_email, "admin@localhost") }}
+{{ option(nagios_config, nagios_defaults, admin_pager, "pagenagios@localhost") }}
 
 
 # DAEMON CORE DUMP OPTION
@@ -912,7 +915,7 @@
 # a core file will be produced, but that's just life...
 # Values: 1 - Allow core dumps
 #         0 - Do not allow core dumps (default)
-{{ option("daemon_dumps_core") }}
+{{ option(nagios_config, nagios_defaults, daemon_dumps_core, "0") }}
 
 
 # LARGE INSTALLATION TWEAKS OPTION
@@ -922,7 +925,7 @@
 # of enabling this option.
 # Values: 1 - Enabled tweaks
 #         0 - Disable tweaks (default)
-{{ option("use_large_installation_tweaks") }}
+{{ option(nagios_config, nagios_defaults, use_large_installation_tweaks, "0") }}
 
 
 # ENABLE ENVIRONMENT MACROS
@@ -937,7 +940,7 @@
 # you can run.
 # Values: 1 - Enable environment variable macros
 #         0 - Disable environment variable macros (default)
-{{ option("enable_environment_macros") }}
+{{ option(nagios_config, nagios_defaults, enable_environment_macros, "0") }}
 
 
 # CHILD PROCESS MEMORY OPTION
@@ -947,8 +950,7 @@
 # program defaults.
 # Value: 1 - Free memory in child processes
 #        0 - Do not free memory in child processes
-#free_child_process_memory=1
-{{ option("free_child_process_memory") }}
+{{ option(nagios_config, nagios_defaults, free_child_process_memory, "") }}
 
 
 # CHILD PROCESS FORKING BEHAVIOR
@@ -961,8 +963,7 @@
 # program defaults.
 # Value: 1 - Child processes fork() twice
 #        0 - Child processes fork() just once
-#child_processes_fork_twice=1
-{{ option("child_processes_fork_twice") }}
+{{ option(nagios_config, nagios_defaults, child_processes_fork_twice, "") }}
 
 
 # DEBUG LEVEL
@@ -984,7 +985,7 @@
 #          512 = Scheduled downtime
 #          1024 = Comments
 #          2048 = Macros
-{{ option("debug_level") }}
+{{ option(nagios_config, nagios_defaults, debug_level, "0") }}
 
 
 # DEBUG VERBOSITY
@@ -992,12 +993,12 @@
 # Values: 0 = Brief output
 #         1 = More detailed
 #         2 = Very detailed
-{{ option("debug_verbosity") }}
+{{ option(nagios_config, nagios_defaults, debug_verbosity, "1") }}
 
 
 # DEBUG FILE
 # This option determines where Nagios should write debugging information.
-{{ option("debug_file") }}
+{{ option(nagios_config, nagios_defaults, debug_file, "/usr/local/nagios/var/nagios.debug") }}
 
 
 # MAX DEBUG FILE SIZE
@@ -1006,18 +1007,18 @@
 # extension.  If a file already exists with a .old extension it will
 # automatically be deleted.  This helps ensure your disk space usage doesn't
 # get out of control when debugging Nagios.
-{{ option("max_debug_file_size") }}
+{{ option(nagios_config, nagios_defaults, max_debug_file_size, "1000000") }}
 
 
 # Should we allow hostgroups to have no hosts, we default this to off since
 # that was the old behavior:
-{{ option("allow_empty_hostgroup_assignment") }}
+{{ option(nagios_config, nagios_defaults, allow_empty_hostgroup_assignment, "0") }}
 
 
 # Normally worker count is dynamically allocated based on 1.5 * number of cpu's
 # with a minimum of 4 workers.  This value will override the defaults
 #check_workers=3
-{{ option("check_workers") }}
+{{ option(nagios_config, nagios_defaults, check_workers) }}
 
 
 # EXPERIMENTAL load controlling options
@@ -1040,4 +1041,4 @@
 #       jobs_min manually here or through the query handler interface that
 #       WILL affect your system
 #loadctl_options=jobs_max=100;backoff_limit=10;rampup_change=5
-{{ option("locdctl_options") }}
+{{ option(nagios_config, nagios_defaults, locdctl_options) }}

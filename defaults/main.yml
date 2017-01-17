@@ -25,15 +25,19 @@ nagios_graph_prefix: "/opt/nagiosgraph"
 nagios_nrpe_prefix: "/opt/nagios"
 
 nagios_user: "nagios"
+nagios_user_uid: "624"
 nagios_group: "nagios"
+nagios_group_gid: "624"
+
 nrpe_user: "nrpe"
 nrpe_group: "nrpe"
+nrpe_user_uid: "676"
+nrpe_group_gid: "676"
 
 nagios_packages: []
 nagios_config_owner: "{{nagios_user}}"
 nagios_config_group: "{{nagios_group}}"
 nagios_config_mode: "0600"
-nagios_config_file:
 nagios_binary: "{{nagios_prefix}}/bin/nagios"
 nagios_service: nagios
 nagios_defaults: {}

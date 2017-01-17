@@ -1,25 +1,19 @@
-{% macro option(section,default,key,override) -%}
+{% macro option(key, override) -%}
 {%   set value = undefined %}
 {%   if override is defined %}
 {%     set value = override %}
-{%   elif section[key] is defined %}
-{%     set value = section[key] %}
-{%   elif default[key] is defined and nagios_skip_defaults != true %}
-{%     set value = default[key] %}
+{%   elif nagios[key] is defined %}
+{%     set value = nagios[key] %}
+{%   elif nagios_defaults[key] is defined and nagios_skip_defaults != true %}
+{%     set value = nagios_defaults[key] %}
 {%   endif %}
-{{ render(key,value) -}}
+{{ render(key, value) -}}
 {%- endmacro %}
 
-{% macro render(key,value,indent=false) -%}
+{% macro render(key, value, indent=false) -%}
 {%   if value is defined %}
 {%     if indent == true %}  {% endif %}
-{%     if value == "" %}
-#{{ key }}=
-{%     elif value is sameas true %}
-{{ key }}=1
-{%     elif value is sameas false %}
-{{ key }}=0
-{%     elif value is string or value is number %}
+{%     if value is string or value is number %}
 {{ key }}={{ value }}
 {%     else %}
 {%       for i in value %}

@@ -1,8 +1,9 @@
 ---
+
 nagios_prefix: "/usr/local/nagios"
+
 nagios_defaults:
   log_file: "{{nagios_prefix}}/var/nagios.log"
-  cfg_file: ""
   cfg_dir:
     - "{{nagios_prefix}}/etc/contacts"
     - "{{nagios_prefix}}/etc/contactgroups"
@@ -106,8 +107,8 @@ nagios_defaults:
   high_host_flap_threshold: "20.0"
   date_format: "iso8601"
   use_timezone: "US/Central"
-  illegal_object_name_chars: `~!$%^&*|'"<>?,()=
-  illegal_macro_output_chars: `~$&|'"<>
+  illegal_object_name_chars: '`~!$%^&*|''"<>?,()='
+  illegal_macro_output_chars: '`~$&|''"<>'
   use_regexp_matching: "0"
   use_true_regexp_matching: "0"
   admin_email: "nagiosadmin@localhost"
