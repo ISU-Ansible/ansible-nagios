@@ -1,0 +1,7 @@
+---
+- name: NAGIOS | Install Nagios
+  group:
+    name: "{{nagios_group | default(nagios_defaults[nagios_group])}}"
+    gid: "{{nagios_group_gid | default('624')}}"
+    system: yes
+    state: present

@@ -1,8 +1,0 @@
----
-- hosts: localhost
-  remote_user: vagrant
-  connection: local
-  become: true
-
-  roles:
-    - role_under_test
